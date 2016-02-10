@@ -17,7 +17,6 @@ FoamFile
 
 PhysicalModel
 {
-	includeDpDt			on;
 	thermodynamicPressure		101325.;
 
 	tauEquation			on;

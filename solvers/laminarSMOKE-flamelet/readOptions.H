@@ -16,14 +16,12 @@ IOdictionary solverOptions
 // Physical model
 Switch zMixEquation;
 Switch tauEquation;
-Switch includeDpDt;
 scalar thermodynamicPressure = 101325.;
 
 const dictionary& physicalModelDictionary = solverOptions.subDict("PhysicalModel");
 {
 	tauEquation = Switch(physicalModelDictionary.lookup(word("tauEquation")));
 	zMixEquation = Switch(physicalModelDictionary.lookup(word("zMixEquation")));
-	includeDpDt = Switch(physicalModelDictionary.lookup(word("includeDpDt")));
 	thermodynamicPressure = readScalar(physicalModelDictionary.lookup("thermodynamicPressure"));
 }
 
