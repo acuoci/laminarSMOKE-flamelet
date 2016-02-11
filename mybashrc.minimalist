@@ -9,7 +9,7 @@ export OPENSMOKE_LIBRARY_PATH=$HOME/Development/MyCodes/OpenSMOKEpp/source
 
 #Options: ISAT support
 export ISAT_SUPPORT='-DOPENSMOKE_USE_ISAT=0'
-export ISAT_INCLUDE=
+export ISAT_INCLUDE=/
 export ISAT_LIBS=
 
 #Options
