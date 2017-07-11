@@ -46,15 +46,20 @@ volScalarField psi
 
 #if STEADYSTATE == 1
 
-	#if OPENFOAM_VERSION < 40 
-	dimensionedScalar rhoMax(simple.dict().lookup("rhoMax"));
-	dimensionedScalar rhoMin(simple.dict().lookup("rhoMin"));
-	#endif
-
 	label pRefCell = 0;
 	scalar pRefValue = 0.0;
 	setRefCell(p, simple.dict(), pRefCell, pRefValue);
 
+	#if OPENFOAM_VERSION < 40 
+		dimensionedScalar rhoMax(simple.dict().lookup("rhoMax"));
+		dimensionedScalar rhoMin(simple.dict().lookup("rhoMin"));
+	#endif
+
+#else
+	#if OPENFOAM_VERSION < 40 
+		dimensionedScalar rhoMax(pimple.dict().lookup("rhoMax"));
+		dimensionedScalar rhoMin(pimple.dict().lookup("rhoMin"));
+	#endif
 #endif
 
 //- Allocating memory for dynamic viscosity [kg/m/s]

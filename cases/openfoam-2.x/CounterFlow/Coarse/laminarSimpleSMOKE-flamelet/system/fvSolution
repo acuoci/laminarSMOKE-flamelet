@@ -1,0 +1,96 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.2.2                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p
+    {
+        solver          GAMG;
+        tolerance       1e-08;
+        relTol          0.05;
+        smoother        GaussSeidel;
+        cacheAgglomeration on;
+        nCellsInCoarsestLevel 20;
+        agglomerator    faceAreaPair;
+        mergeLevels     1;
+    }
+
+    U
+    {
+        solver          smoothSolver;
+        smoother        GaussSeidel;
+        nSweeps         2;
+        tolerance       1e-07;
+        relTol          1e-05;
+    }
+
+    zMix
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-08;
+        relTol          1e-06;
+	minIter		2;
+    }
+
+    tau
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-08;
+        relTol          1e-06;
+	minIter		2;
+    }
+}
+
+SIMPLE
+{
+    nNonOrthogonalCorrectors 0;
+
+    rhoMin          rhoMin [ 1 -3 0 0 0 ] 0.075;
+    rhoMax          rhoMax [ 1 -3 0 0 0 ] 2.0;
+
+    residualControl
+    {
+	default         1e-9;
+
+        p               1e-9;
+        U               1e-9;
+        zMix            1e-9;
+	tau		1e-9;
+    }
+}
+
+relaxationFactors
+{
+    fields
+    {
+        p               0.2;
+        rho             0.05;
+    }
+    equations
+    {
+        default         0.3;
+
+        U               0.3;
+        zMix            0.3;
+	tau		0.3;
+    }
+}
+
+
+// ************************************************************************* //

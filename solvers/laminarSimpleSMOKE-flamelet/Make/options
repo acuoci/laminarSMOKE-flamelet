@@ -22,9 +22,5 @@ EXE_LIBS = \
     -lmeshTools \
     -lsampling \
     -lgfortran \
-    $(MKL_LIBS) \
-    -lboost_date_time \
-    -lboost_filesystem \
-    -lboost_system \
-    -lboost_regex
+    $(MKL_LIBS) 
     
