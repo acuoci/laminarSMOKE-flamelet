@@ -36,14 +36,15 @@ Author
 // This is a steady state simulation
 #define STEADYSTATE 1
 
-// OpenSMOKE++ Definitions
-#include "OpenSMOKEpp"
-#include "math/OpenSMOKEUtilities.h"
-
 // OpenFOAM
 #include "fvCFD.H"
 #include "simpleControl.H"
+#if OPENFOAM_VERSION >= 40
+#include "fvOptions.H"
+#include "pressureControl.H"
+#else
 #include "fvIOoptionList.H"
+#endif
 
 // Mixture fraction properties
 #include "properties.mixturefraction.H"	
@@ -60,13 +61,17 @@ tmp<volScalarField> Rho(volScalarField& p, volScalarField& psi)
 
 int main(int argc, char *argv[])
 {
-
 	#include "setRootCase.H"
 	#include "createTime.H"
 	#include "createMesh.H"
 	#include "readGravitationalAcceleration.H"
 
-	simpleControl simple(mesh);
+	#if OPENFOAM_VERSION >= 40
+		#include "createControl.H"
+		#include "createMRF.H"
+	#else
+		simpleControl simple(mesh);	
+	#endif
 
 	#include "createBasicFields.H"
 	#include "readOptions.H"
@@ -77,38 +82,48 @@ int main(int argc, char *argv[])
 
 	dimensionedScalar initialMass = fvc::domainIntegrate(rho);
 
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-    Info<< "\nStarting time loop\n" << endl;
+	Info<< "\nStarting time loop\n" << endl;
 
-    while (simple.loop())
-    {
-         Info<< "Time = " << runTime.timeName() << nl << endl;
+	while (simple.loop())
+	{
+		Info<< "Time = " << runTime.timeName() << nl << endl;
 
-	 // Pressure-velocity SIMPLE corrector
-         {
-            #include "UEqn.H"
-            #include "pEqn.H"
-	    #include "zMixEqn.H"
+		// Pressure-velocity SIMPLE corrector
+		{
+			#include "UEqn.H"
+			
+			#if OPENFOAM_VERSION >= 40
+			if (simple.consistent())
+			{
+				#include "pcEqn.4x.H"
+			}
+			else
+			#endif
+			{
+				#include "pEqn.H"
+			}
 
-            #include "properties.H"
-         }	
+			#include "zMixEqn.H"
 
-	 // Passive scalars
-	 #include "tauEqn.H"
-				
-	 runTime.write();
+			#include "properties.H"
+		}	
 
-		
-         Info << "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
-              << "  ClockTime = " << runTime.elapsedClockTime() << " s"
-              << nl << endl;
-    }
+		// Passive scalars
+		#include "tauEqn.H"
 
-    Info<< "End\n" << endl;
+		runTime.write();
 
-    return 0;
+		Info 	<< "ExecutionTime = " 	<< runTime.elapsedCpuTime() 	<< " s"
+			<< "  ClockTime = " 	<< runTime.elapsedClockTime()	<< " s"
+			<< nl << endl;
+	}
+
+	Info<< "End\n" << endl;
+
+	return 0;
 }
 
-
 // ************************************************************************* //
+

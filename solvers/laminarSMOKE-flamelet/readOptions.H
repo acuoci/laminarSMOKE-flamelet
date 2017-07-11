@@ -14,8 +14,8 @@ IOdictionary solverOptions
 
 
 // Physical model
-Switch zMixEquation;
-Switch tauEquation;
+Switch zMixEquation = true;
+Switch tauEquation = true;
 scalar thermodynamicPressure = 101325.;
 
 const dictionary& physicalModelDictionary = solverOptions.subDict("PhysicalModel");

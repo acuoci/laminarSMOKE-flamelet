@@ -46,17 +46,17 @@ volScalarField psi
 
 #if STEADYSTATE == 1
 
-dimensionedScalar rhoMax(simple.dict().lookup("rhoMax"));
-dimensionedScalar rhoMin(simple.dict().lookup("rhoMin"));
+	dimensionedScalar rhoMax(simple.dict().lookup("rhoMax"));
+	dimensionedScalar rhoMin(simple.dict().lookup("rhoMin"));
 
-label pRefCell = 0;
-scalar pRefValue = 0.0;
-setRefCell(p, simple.dict(), pRefCell, pRefValue);
+	label pRefCell = 0;
+	scalar pRefValue = 0.0;
+	setRefCell(p, simple.dict(), pRefCell, pRefValue);
 
 #else
 
-dimensionedScalar rhoMax(pimple.dict().lookup("rhoMax"));
-dimensionedScalar rhoMin(pimple.dict().lookup("rhoMin"));
+	dimensionedScalar rhoMax(pimple.dict().lookup("rhoMax"));
+	dimensionedScalar rhoMin(pimple.dict().lookup("rhoMin"));
 
 #endif
 

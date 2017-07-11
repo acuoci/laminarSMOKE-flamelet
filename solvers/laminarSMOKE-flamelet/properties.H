@@ -1,18 +1,24 @@
 {
 	Info<< "Properties evaluation based on mixture fraction... " ;
 
-	double tStart = OpenSMOKE::OpenSMOKEGetCpuTime();
-
 	// Internal fields
 	{
 		const scalarField& zMixCells = zMix.internalField(); 
 		const scalarField& pCells    = p.internalField(); 
 
+		#if OPENFOAM_VERSION >= 40
+		scalarField& rhoCells       =  rho.ref();
+		scalarField& psiCells       =  psi.ref();
+		scalarField& gammazMixCells =  gammazMix.ref();
+		scalarField& lambdaCells    =  lambda.ref();
+		scalarField& muCells        =  mu.ref();
+		#else
 		scalarField& rhoCells       =  rho.internalField();
 		scalarField& psiCells       =  psi.internalField();
 		scalarField& gammazMixCells =  gammazMix.internalField();
 		scalarField& lambdaCells    =  lambda.internalField();
 		scalarField& muCells        =  mu.internalField();
+		#endif
 
 		forAll(zMixCells, celli)
 		{
@@ -34,6 +40,16 @@
 	// Boundaries
 	forAll(zMix.boundaryField(), patchi)
 	{
+		#if OPENFOAM_VERSION >= 40
+		fvPatchScalarField& pp = p.boundaryFieldRef()[patchi];
+		fvPatchScalarField& pzmix = zMix.boundaryFieldRef()[patchi];
+        
+		fvPatchScalarField& prho          = rho.boundaryFieldRef()[patchi];
+		fvPatchScalarField& ppsi          = psi.boundaryFieldRef()[patchi];
+		fvPatchScalarField& pgammazmix    = gammazMix.boundaryFieldRef()[patchi];
+		fvPatchScalarField& plambda       = lambda.boundaryFieldRef()[patchi];
+		fvPatchScalarField& pmu           = mu.boundaryFieldRef()[patchi];
+		#else
 		fvPatchScalarField& pp    = p.boundaryField()[patchi];
 		fvPatchScalarField& pzmix = zMix.boundaryField()[patchi];
         
@@ -42,6 +58,7 @@
 		fvPatchScalarField& pgammazmix    = gammazMix.boundaryField()[patchi];
 		fvPatchScalarField& plambda       = lambda.boundaryField()[patchi];
 		fvPatchScalarField& pmu           = mu.boundaryField()[patchi];
+		#endif
 
 		forAll(pzmix, facei)
 		{
@@ -59,8 +76,4 @@
 			pmu[facei] = DynamicViscosity(pzmix[facei]);
 		}
 	}
-
-	double tEnd = OpenSMOKE::OpenSMOKEGetCpuTime();
-
-	Info << "done in " << tEnd - tStart << " s  (" << (tEnd-tStart)/double(mesh.nCells())*1000. << " ms per cell)" << endl;
 }

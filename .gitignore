@@ -5,6 +5,7 @@
 .*.sw[op]
 *~
 linux64GccDPOpt/
+linux64Gcc63DPInt32Opt/
 lnInclude/
 
 # Compiled source #
