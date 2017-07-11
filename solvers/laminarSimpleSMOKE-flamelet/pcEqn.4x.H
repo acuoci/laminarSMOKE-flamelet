@@ -1,4 +1,6 @@
 {
+	rho = Rho(p,psi);
+
 	volScalarField rAU(1.0/UEqn.A());
 	volScalarField rAtU(1.0/(1.0/rAU - UEqn.H1()));
 	volVectorField HbyA(constrainHbyA(rAU*UEqn.H(), U, p));
@@ -6,7 +8,7 @@
 
 	bool closedVolume = false;
 
-	surfaceScalarField phiHbyA("phiHbyA", fvc::flux(rho*HbyA));
+	surfaceScalarField phiHbyA("phiHbyA", fvc::interpolate(rho)*fvc::flux(HbyA));
 	MRF.makeRelative(fvc::interpolate(rho), phiHbyA);
 
 	volScalarField rhorAtU("rhorAtU", rho*rAtU);
@@ -24,7 +26,7 @@
 
 	    phiHbyA +=
 		fvc::interpolate(rho*(rAtU - rAU))*fvc::snGrad(p)*mesh.magSf()
-	      - fvc::interpolate(p)*phid;
+	      - fvc::interpolate(psi*p)*phiHbyA/fvc::interpolate(rho);
 
 	    HbyA -= (rAU - rAtU)*fvc::grad(p);
 
@@ -90,7 +92,19 @@
 
 	// The incompressibe form of the continuity error check is appropriate for
 	// steady-state compressible also.
-	#include "continuityErrs.H"
+	{
+		volScalarField contErr(fvc::div(phi));
+
+		scalar sumLocalContErr = runTime.deltaTValue()*mag(contErr)().weightedAverage(mesh.V()).value();
+
+		scalar globalContErr = runTime.deltaTValue()*contErr.weightedAverage(mesh.V()).value();
+		cumulativeContErr += globalContErr;
+
+		Info	<< "time step continuity errors : sum local = " << sumLocalContErr
+			<< ", global = " << globalContErr
+			<< ", cumulative = " << cumulativeContErr
+			<< endl;
+	}
 
 	// Explicitly relax pressure for momentum corrector
 	p.relax();
@@ -99,7 +113,7 @@
 	U.correctBoundaryConditions();
 	fvOptions.correct(U);
 
-	pressureControl.limit(p);
+	bool pLimited = pressureControl.limit(p);
 
 	// For closed-volume cases adjust the pressure and density levels
 	// to obey overall mass continuity
@@ -109,13 +123,12 @@
 		/fvc::domainIntegrate(psi);
 	}
 
-	p.correctBoundaryConditions();
+	if (pLimited || closedVolume)
+	{
+	    p.correctBoundaryConditions();
+	}
 
-	// Recalculate density from the relaxed pressure
-	//rho = thermo.rho();
-    	rho = Rho(p,psi);
-    	rho = max(rho, rhoMin);
-    	rho = min(rho, rhoMax);
+	rho = Rho(p,psi);
 
 	if (!simple.transonic())
 	{

@@ -46,17 +46,14 @@ volScalarField psi
 
 #if STEADYSTATE == 1
 
+	#if OPENFOAM_VERSION < 40 
 	dimensionedScalar rhoMax(simple.dict().lookup("rhoMax"));
 	dimensionedScalar rhoMin(simple.dict().lookup("rhoMin"));
+	#endif
 
 	label pRefCell = 0;
 	scalar pRefValue = 0.0;
 	setRefCell(p, simple.dict(), pRefCell, pRefValue);
-
-#else
-
-	dimensionedScalar rhoMax(pimple.dict().lookup("rhoMax"));
-	dimensionedScalar rhoMin(pimple.dict().lookup("rhoMin"));
 
 #endif
 

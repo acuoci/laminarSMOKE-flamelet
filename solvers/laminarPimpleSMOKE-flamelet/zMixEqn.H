@@ -4,10 +4,10 @@
 		fvScalarMatrix zMixEqn
 		(
 			fvm::ddt(rho,zMix)
-		      + fvm::div(phi, zMix) 
+		      + fvm::div(phi,zMix) 
 		        == 
-			fvm::laplacian(rho*gammazMix, zMix) +		     	
-			fvOptions(rho, zMix)
+			fvm::laplacian(rho*gammazMix, zMix) 
+                      + fvOptions(rho,zMix)
 		);
 
 		// Solve

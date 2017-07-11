@@ -60,8 +60,8 @@ solvers
 SIMPLE
 {
     nNonOrthogonalCorrectors 0;
-    rhoMin          rhoMin [ 1 -3 0 0 0 ] 0.075;
-    rhoMax          rhoMax [ 1 -3 0 0 0 ] 2.0;
+    pMinFactor      0.4;
+    pMaxFactor      1.5;
 
     residualControl
     {
@@ -83,10 +83,11 @@ relaxationFactors
     }
     equations
     {
+        default         0.3;
+
         U               0.3;
         zMix            0.3;
 	tau		0.3;
-	default         0.3;
     }
 }
 
