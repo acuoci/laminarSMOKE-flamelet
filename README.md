@@ -11,8 +11,6 @@ Supported OpenFOAM versions
 Compulsory libraries
 --------------------
 - Eigen (http://eigen.tuxfamily.org/index.php?title=Main_Page)
-- RapidXML (http://rapidxml.sourceforge.net/)
-- Boost C++ (http://www.boost.org/)
 
 Optional libraries
 ------------------
@@ -43,7 +41,7 @@ Instructions to compile the Minimalist+MKL version
 
 Run your first case
 -------------------
-The folder `cases/CounterFlow/Coarse` contains a simple test case (counterflow diffusion flame).
+The folder `cases/openfoam-4.x/CounterFlow/Coarse` contains a simple test case (counterflow diffusion flame). Obviously, if you are using older versions of OpenFOAM, the corresponding folder is `cases/openfoam-2.x/CounterFlow/Coarse`.
 
 1. Unsteady simulation: Open the `laminarPimpleSMOKE-flamelet` folder, build the mesh using the `blockMesh` utility, and run the case using the `laminarPimpleSMOKE-flamelet` solver. Even if you are interested in steady state conditions, we strongly suggest to always start with unsteady calculations to create a reasonable first-guess solution for the application of the steady state solver.
 
