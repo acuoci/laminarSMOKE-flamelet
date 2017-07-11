@@ -24,15 +24,17 @@ Two different options are available to compile the code
 1. Minimalist: no external Intel MKL libraries are needed
 2. Minimalist + Intel MKL: better performances thanks to the linking to the Intel MKL libraries is needed
 
-1. Instructions to compile the Minimalist version
--------------------------------------------------
+
+Instructions to compile the Minimalist version
+----------------------------------------------
 1. Open the `mybashrc.minimalist`, select the OpenFOAM version you are working with and update the required paths
 2. Type: `source mybashrc.minimalist`
 3. Compile the steady-state solver: from the `solver/laminarSimpleSMOKE-flamelet` folder type `wclean` and then `wmake`
 4. Compile the unsteady solver: from the `solver/laminarPimpleSMOKE-flamelet` folder type `wclean` and then `wmake`
 
-2. Instructions to compile the Minimalist+MKL version
------------------------------------------------------
+
+Instructions to compile the Minimalist+MKL version
+--------------------------------------------------
 1. Open the `mybashrc.minimalist.mkl`select the OpenFOAM version you are working with and update the required paths (in particular those pointing to the Intel MKL libraries)
 2. Type: `source mybashrc.minimalist.mkl`
 3. Compile the steady-state solver: from the `solver/laminarSimpleSMOKE-flamelet` folder type `wclean` and then `wmake`
