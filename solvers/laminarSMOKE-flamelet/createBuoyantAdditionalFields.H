@@ -42,9 +42,6 @@ volScalarField K("K", 0.5*magSqr(U));
 
 	#if STEADYSTATE == 1
 
-		label pRefCell = 0;
-		scalar pRefValue = 0.0;
-
 		setRefCell
 		(
 			p,
@@ -81,9 +78,6 @@ volScalarField K("K", 0.5*magSqr(U));
 
 	#if STEADYSTATE == 1
 
-		label pRefCell = 0;
-		scalar pRefValue = 0.0;
-
 		setRefCell
 		(
 			p,
@@ -119,9 +113,6 @@ volScalarField K("K", 0.5*magSqr(U));
 	p_rgh = p - rho*gh;
 
 	#if STEADYSTATE == 1
-
-		label pRefCell = 0;
-		scalar pRefValue = 0.0;
 
 		setRefCell
 		(
