@@ -1,0 +1,25 @@
+EXE_INC = \
+     $(OPENFOAM_VERSION) \
+    -w \
+    $(MKL_SUPPORT) \
+    $(DEVVERSION) \
+    -I../laminarBuoyantPimpleSMOKE-flamelet \
+    -I../laminarPimpleSMOKE-flamelet \
+    -I../laminarSMOKE-flamelet \
+    -I$(EIGEN_LIBRARY_PATH) \
+    -I$(MKL_PATH)/include \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/fvOptions/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/sampling/lnInclude
+
+EXE_LIBS = \
+    -L$(FOAM_USER_LIBBIN) \
+    $(MKL_LIBS) \
+    -lfiniteVolume \
+    -lfvOptions \
+    -lmeshTools \
+    -lsampling \
+    -lgfortran \
+    $(MKL_LIBS) 
+    
