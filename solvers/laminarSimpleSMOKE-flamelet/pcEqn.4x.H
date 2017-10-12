@@ -44,11 +44,15 @@
 		// Relax the pressure equation to maintain diagonal dominance
 		pEqn.relax();
 
+		#if DEVVERSION == 1
 		pEqn.setReference
 		(
 		    pressureControl.refCell(),
 		    pressureControl.refValue()
 		);
+		#else
+		pEqn.setReference(pRefCell, pRefValue);
+		#endif
 
 		pEqn.solve();
 
@@ -75,11 +79,15 @@
 		    fvOptions(psi, p, rho.name())
 		);
 
+		#if DEVVERSION == 1
 		pEqn.setReference
 		(
 		    pressureControl.refCell(),
 		    pressureControl.refValue()
 		);
+		#else
+		pEqn.setReference(pRefCell, pRefValue);
+		#endif
 
 		pEqn.solve();
 
@@ -113,7 +121,11 @@
 	U.correctBoundaryConditions();
 	fvOptions.correct(U);
 
+	#if DEVVERSION == 1
 	bool pLimited = pressureControl.limit(p);
+	#else
+	bool pLimited = false;
+	#endif
 
 	// For closed-volume cases adjust the pressure and density levels
 	// to obey overall mass continuity

@@ -101,8 +101,10 @@ U.correctBoundaryConditions();
 fvOptions.correct(U);
 K = 0.5*magSqr(U);
 
+#if DEVVERSION == 1
 pressureControl.limit(p);
 p.correctBoundaryConditions();
+#endif
 rho = Rho(p,psi);
 
 if (!pimple.transonic())

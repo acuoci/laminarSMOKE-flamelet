@@ -40,10 +40,12 @@ Author
 #include "fvCFD.H"
 #include "simpleControl.H"
 #if OPENFOAM_VERSION >= 40
-#include "fvOptions.H"
-#include "pressureControl.H"
+	#include "fvOptions.H"
+	#if DEVVERSION == 1
+		#include "pressureControl.H"
+	#endif
 #else
-#include "fvIOoptionList.H"
+	#include "fvIOoptionList.H"
 #endif
 
 // Mixture fraction properties
