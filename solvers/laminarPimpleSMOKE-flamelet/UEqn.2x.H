@@ -7,8 +7,7 @@ tmp<fvVectorMatrix> UEqn
   - fvm::laplacian(mu, U)
   - fvc::div(mu*dev2(fvc::grad(U)().T()))
  ==
-    rho*g
-  + fvOptions(rho, U)
+    fvOptions(rho, U)
 );
 
 UEqn().relax();
