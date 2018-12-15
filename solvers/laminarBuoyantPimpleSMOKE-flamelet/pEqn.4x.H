@@ -74,8 +74,12 @@ while (pimple.correctNonOrthogonal())
         fvOptions(psi, p_rgh, rho.name())
     );
 
-    p_rghEqn.solve(mesh.solver(p_rgh.select(pimple.finalInnerIter())));
-
+	#if OPENFOAM_VERSION >=60
+	p_rghEqn.solve(p_rgh.select(pimple.finalInnerIter()));
+	#else
+	p_rghEqn.solve(mesh.solver(p_rgh.select(pimple.finalInnerIter())));
+	#endif
+   
     if (pimple.finalNonOrthogonalIter())
     {
         phi = phiHbyA + p_rghEqn.flux();

@@ -98,7 +98,9 @@ int main(int argc, char *argv[])
 		Info<< "Time = " << runTime.timeName() << nl << endl;
 
 		// Continuity equation
+		#if OPENFOAM_VERSION <= 50
 		if (pimple.nCorrPIMPLE() <= 1)
+		#endif
 		{
 			#include "rhoEqn.H"
 		}
